@@ -1,0 +1,108 @@
+# Raspberry Pi Desktop Assistant Configuration
+
+# System
+system:
+  name: "RaspiDesktopAssistant V0.0.0"
+  log_level: "INFO" # DEBUG, INFO, WARNING, ERROR
+  storage_path: "./logs"
+
+# LLM
+llm:
+  # Text model configuration (required - core component of the assistant)
+  text:
+    api_key: "your-text-model-api-key-here"
+    base_url: "https://api.text-model-provider.com/v1"
+    model: "deepseek-chat"
+    parameters:
+      max_tokens: 4096
+      temperature: 1.0
+      top_p: 1
+      frequency_penalty: 0.0
+      presence_penalty: 0.0
+      stream: true
+      max_turns: 42
+    init_prompt: "你是一个友好的助手，名叫树莓派桌面助手。请用简短的中文回答问题，语气亲切自然。你的目标是帮助用户解决问题，提供有用的信息和建议。"
+
+  # Vision model configuration (optional - enables image understanding capabilities)
+  vision:
+    enable: false # Set to true to enable vision capabilities
+    api_key: "your-vision-model-api-key-here"
+    base_url: "https://api.vision-model-provider.com/v1"
+    model: "qwen-vl"
+    parameters:
+      max_tokens: 4096
+      temperature: 1.0
+      top_p: 1
+      frequency_penalty: 0.0
+      presence_penalty: 0.0
+      stream: true
+      max_turns: 42
+
+# Vision
+vision:
+  enable: false
+  camera:
+    resolution: [640, 480]
+    framerate: 30
+
+# Speech
+speech:
+  hot_word:
+    engine: "porcupine" # Engine: porcupine
+    access_key: "your-access-key-here"
+    keywords: ["hey siri", "computer", "jarvis"] # Custom wake-up words list
+    sensitivities: [0.5, 0.5, 0.5] # Sensitivity for each wake-up word, range 0-1
+    language: "en" # Language setting: en(English), zh(Chinese) etc.
+    response_text: "我在" # Response text when hotword is detected
+
+  language: "zh-CN"
+
+  audio:
+    # Common audio parameters
+    format: "wav"
+    channels: 1
+    sampling_rate: 16000
+    chunk_size: 1024
+    sample_width: 2
+
+  asr:
+    enable: true
+    baidu:
+      app_id: "your-app-id-here"
+      api_key: "your-api-key-here"
+      secret_key: "your-secret-key-here"
+      language: "zh-CN"
+      dev_pid: 1537 # Mandarin with simple English recognition
+      record_timeout: 5 # Default recording duration in seconds
+    no_speech_response: "抱歉，我没有听清楚" # Response when no speech is recognized
+    stream:
+      enable: true
+      chunk_size: 2048 # Size of each audio chunk in bytes
+      max_silence: 5.0 # Maximum silence duration before stopping (seconds)
+      min_speaking: 0.2 # Minimum speaking duration before processing (seconds)
+      energy_threshold: 1500 # Energy threshold for voice activity detection
+
+  tts:
+    enable: true
+    baidu:
+      app_id: "your-app-id-here"
+      api_key: "your-api-key-here"
+      secret_key: "your-secret-key-here"
+      language: "zh"
+      voice: 0 # Speaker: 0-female, 1-male, 3-male2, 4-female2
+      speed: 5 # Speed: 0-15
+      pitch: 5 # Pitch: 0-15
+      volume: 5 # Volume: 0-15
+      format: 6 # 6 means WAV format
+    stream:
+      enable: true # Enable streaming TTS
+      chunk_size: 2048 # Size of each audio chunk in bytes
+      sentence_end_marks: ["。", "！", "？", ".", "!", "?", "\n"]
+      buffer_size: 4096 # Size of the audio buffer for streaming playback
+
+  svs:
+    enable: false
+
+# Action
+action:
+  enable: false
